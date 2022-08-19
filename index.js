@@ -148,13 +148,15 @@ function editNote(editIndex) {
 
     modifyBtn.addEventListener('click', () => {
         notesObj[editIndex] = addTxt.value;
+        console.log(editIndex);
+        console.log(notesObj[editIndex]);
         localStorage.setItem("notes", JSON.stringify(notesObj));
         showNotes();
         modifyBtn.style.display = "none";
+        addBtn.style.display = "block";
+        editIndex = '';
         setTimeout(() => {
             addTxt.value = '';
         }, 0);
     })
-    localStorage.setItem("notes", JSON.stringify(notesObj));
-    showNotes();
 }
