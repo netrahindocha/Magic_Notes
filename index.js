@@ -22,11 +22,11 @@ addBtn.addEventListener("click", function (e) {
         notesObj = JSON.parse(notes);
     }
     // If no notes title are stored previously, we will create an empty array to store the notes title(titleObj)
-    if(titles == null){
+    if (titles == null) {
         titleObj = [];
     }
     // If we have previously saved notes title, we will add old notes title (notes) to the new empty array (titleObj)
-    else{
+    else {
         titleObj = JSON.parse(titles);
     }
     // In order to add new notes to an Array, we need to add the textarea value (addTxt) to the notes array (notesObj)
@@ -40,6 +40,12 @@ addBtn.addEventListener("click", function (e) {
     addTitle.value = "";
     // console.log(notesObj);
     // In order to show the notes on clicking the button, we need to call the function inside addBtn event 
+
+    let newNote = document.getElementById('newNote');
+    let plusInner = document.getElementById('plus-inner');
+    newNote.style.display = 'none';
+    plusInner.innerHTML = '+';
+
     showNotes();
 })
 
@@ -56,7 +62,7 @@ function showNotes() {
     }
     let html = "";
 
-    
+
     if (titles == null) {
         titleObj = [];
     }
@@ -66,9 +72,9 @@ function showNotes() {
     // For each of the element in notes Array, we will build new note card for each of them 
     notesObj.forEach(function (element, index) {
         html += `
-        <div class="noteCard my-2 mx-2 card" style="width: 18rem;" id="notesBorder">
+        <div class="noteCard my-2 mx-2 cardTit" style="width: 18rem;" id="notesBorder">
                 <div class="card-body">
-                <h5 class="card-title">${titleObj[index]}</h5>
+                <h5 class="card-title" id="${index}">${titleObj[index]}</h5>
                 <p class="card-text">${element}</p>
                 <div class="margin">
                 <button id="${index}" onclick="editNote(this.id)" class="editBtn">Edit Note</button>
@@ -127,24 +133,39 @@ function deleteNote(index) {
     showNotes();
 }
 
+let notFound = document.getElementById('notFound');
+notFound.style.display = 'none';
+
 
 let search = document.getElementById("searchTxt");
 search.addEventListener("input", function () {
 
     let inputVal = search.value.toLowerCase();
-    // console.log('Input event fired!', inputVal);
     let noteCards = document.getElementsByClassName("noteCard");
+
     Array.from(noteCards).forEach(function (element) {
         let cardTxt = element.getElementsByTagName("p")[0].innerText.toLowerCase();
-        if (cardTxt.includes(inputVal)) {
+
+        let cardTitle = element.getElementsByTagName("h5")[0].innerText.toLowerCase();
+
+        if (cardTxt.includes(inputVal) || cardTitle.includes(inputVal)) {
             element.style.display = "block";
         }
+
+        else if (cardTitle.includes(inputVal) && cardTxt.includes(inputVal)) {
+            element.style.display = "block";
+        }
+
         else {
             element.style.display = "none";
         }
-        // console.log(cardTxt);
+        
     })
+
+
 })
+
+
 
 // Add more features: 
 // 1. Add Title
@@ -214,15 +235,15 @@ newNote.style.display = 'none';
 
 let addNote = document.getElementById('plus');
 
-addNote.addEventListener('click', ()=>{
+addNote.addEventListener('click', () => {
     newNote = document.getElementById('newNote');
     plusInner = document.getElementById('plus-inner');
 
-    if(newNote.style.display == 'none'){
+    if (newNote.style.display == 'none') {
         plusInner.innerHTML = '-';
         newNote.style.display = 'block';
     }
-    else if(newNote.style.display == 'block'){
+    else if (newNote.style.display == 'block') {
         plusInner.innerHTML = '+';
         newNote.style.display = 'none';
     }
