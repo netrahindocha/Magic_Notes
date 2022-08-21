@@ -72,13 +72,13 @@ function showNotes() {
     // For each of the element in notes Array, we will build new note card for each of them 
     notesObj.forEach(function (element, index) {
         html += `
-        <div class="noteCard my-2 mx-2 cardTit" style="width: 18rem;" id="notesBorder">
+        <div class="noteCard my-2 mx-2 card cardTit" style="width: 18rem;" id="notesBorder">
                 <div class="card-body">
                 <h5 class="card-title">${titleObj[index]}</h5>
                 <p class="card-text">${element}</p>
                 <div class="margin">
-                <button id="${index}" onclick="editNote(this.id)" class="editBtn">Edit Note</button>
-                <button id="${index}" onclick="deleteNote(this.id)" class="deleteBtn">Delete Note</button>
+                <button id="${index}" onclick="editNote(this.id)" class="editBtn"><img src="edit.png" alt=""></button>
+                <button id="${index}" onclick="deleteNote(this.id)" class="deleteBtn"><img src="delete.png" alt=""></button>
                 </div>
             </div>
         </div>`
