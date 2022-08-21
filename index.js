@@ -42,9 +42,8 @@ addBtn.addEventListener("click", function (e) {
     // In order to show the notes on clicking the button, we need to call the function inside addBtn event 
 
     let newNote = document.getElementById('newNote');
-    let plusInner = document.getElementById('plus-inner');
     newNote.style.display = 'none';
-    plusInner.innerHTML = '+';
+    document.getElementById("plus-inner").src = "add.png";
 
     showNotes();
 })
@@ -74,11 +73,15 @@ function showNotes() {
         html += `
         <div class="noteCard my-2 mx-2 card cardTit" style="width: 18rem;" id="notesBorder">
                 <div class="card-body">
-                <h5 class="card-title">${titleObj[index]}</h5>
-                <p class="card-text">${element}</p>
+                <div class="title-3-dots">
+                    <h5 class="card-title">${titleObj[index]}</h5>
+                </div>
+                <p class="card-text" id="&nbsp;${index}" onclick="addCheckList(this.id)">${element}</p>
                 <div class="margin">
                 <button id="${index}" onclick="editNote(this.id)" class="editBtn"><img src="edit.png" alt=""></button>
                 <button id="${index}" onclick="deleteNote(this.id)" class="deleteBtn"><img src="delete.png" alt=""></button>
+                <span><i class="fa-solid fa-list-check checkListBtn" id="${index}" onclick="addCheckList(this.id)"></i></span>
+                <button id="" class="textBtn"><img src="text.png" alt=""></button>
                 </div>
             </div>
         </div>`
@@ -123,9 +126,16 @@ function deleteNote(index) {
         titleObj = JSON.parse(titles);
     }
 
+    if(confirm("Are you sure to delete it?") == true){
+        notesObj.splice(index, 1);
+        titleObj.splice(index, 1);
+    }
+    else{
+        console.log("Not deleting");
+    }
+
     // In order to delete a note from the notes array as per its index, we used splice function
-    notesObj.splice(index, 1);
-    titleObj.splice(index, 1);
+    
     // Once we remove a note, we need to update the localStorage and convert the notes array into string
     localStorage.setItem("notes", JSON.stringify(notesObj));
     localStorage.setItem("titles", JSON.stringify(titleObj));
@@ -136,13 +146,14 @@ function deleteNote(index) {
 let notFound = document.getElementById('notFound');
 notFound.style.display = 'none';
 
+let not_found = new Boolean(true);
 
 let search = document.getElementById("searchTxt");
 search.addEventListener("input", function () {
 
     let inputVal = search.value.toLowerCase();
     let noteCards = document.getElementsByClassName("noteCard");
-
+    let not_found_bool = true;
     Array.from(noteCards).forEach(function (element) {
         let cardTxt = element.getElementsByTagName("p")[0].innerText.toLowerCase();
 
@@ -150,10 +161,8 @@ search.addEventListener("input", function () {
 
         if (cardTxt.includes(inputVal) || cardTitle.includes(inputVal)) {
             element.style.display = "block";
-        }
-
-        else if (cardTitle.includes(inputVal) && cardTxt.includes(inputVal)) {
-            element.style.display = "block";
+            notFound.style.display = "none";
+            not_found_bool = false;
         }
 
         else {
@@ -162,6 +171,12 @@ search.addEventListener("input", function () {
         
     })
 
+    if(not_found_bool){
+        notFound.style.display = "block";
+    }
+    else{
+        notFound.style.display = "none";
+    }
 
 })
 
@@ -206,9 +221,8 @@ function editNote(editIndex) {
     addBtn.style.display = 'none';
 
     let newNote = document.getElementById('newNote');
-    let plusInner = document.getElementById('plus-inner');
     newNote.style.display = 'block';
-    plusInner.innerHTML = '-';
+    document.getElementById("plus-inner").src = "minus.png";
 
     modifyBtn.addEventListener('click', () => {
         notesObj[editIndex] = addTxt.value;
@@ -223,7 +237,7 @@ function editNote(editIndex) {
         addBtn.style.display = "block";
         editIndex = '';
         newNote.style.display = 'none';
-        plusInner.innerHTML = '+';
+        document.getElementById("plus-inner").src = "add.png";
         setTimeout(() => {
             addTxt.value = '';
             addTitle.value = '';
@@ -233,22 +247,42 @@ function editNote(editIndex) {
 
 newNote.style.display = 'none';
 
-let addNote = document.getElementById('plus');
+let addNote = document.getElementById('plus-inner');
 
 addNote.addEventListener('click', () => {
     newNote = document.getElementById('newNote');
     plusInner = document.getElementById('plus-inner');
 
     if (newNote.style.display == 'none') {
-        plusInner.innerHTML = '-';
+        document.getElementById("plus-inner").src = "minus.png";
         newNote.style.display = 'block';
     }
     else if (newNote.style.display == 'block') {
-        plusInner.innerHTML = '+';
+        document.getElementById("plus-inner").src = "add.png";
         newNote.style.display = 'none';
     }
 });
 
 
+// CHECKLIST 
 
+let checkListBtn = document.getElementsByClassName("checkListBtn");
+
+
+function addCheckList(index){
+
+    let cardTxt = document.getElementsByClassName("card-text");
+    // console.log(cardTxt[index]);
+    let checkBox = document.createElement("input");
+    checkBox.setAttribute("type", "checkbox");
+    cardTxt[index].insertBefore(checkBox, cardTxt[index].firstChild);
+
+    // console.log(notesObj[index]);
+
+    // cardTxt.innerHTML = `<input type="checkbox" class="card-text" value="checklist"><label for="abcdefg ${notesObj[index]}"></label></input>`
+
+    // notesObj.forEach(function(index){
+
+    // })
+};
 
